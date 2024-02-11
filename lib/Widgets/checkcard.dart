@@ -11,6 +11,7 @@ class CheckCard extends StatefulWidget {
 }
 
 class _CheckCardState extends State<CheckCard> {
+  TextEditingController textEditingController = TextEditingController();
   late CollectionReference tasks;
   String t = '';
   String c = '';
@@ -46,7 +47,7 @@ class _CheckCardState extends State<CheckCard> {
           c = widget.checklistItem['category'];
 
           widget.checklistItem.reference.delete();
-
+          setState(() {});
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: const Text("Task deleted."),
@@ -80,16 +81,73 @@ class _CheckCardState extends State<CheckCard> {
               widget.checklistItem['task'],
               style: const TextStyle(color: Colors.white),
             ),
-            trailing: Checkbox(
-              checkColor: Colors.black,
-              fillColor: const MaterialStatePropertyAll(Colors.white),
-              value: widget.checklistItem['completed'],
-              onChanged: (value) {
-                setState(() {
-                  widget.checklistItem.reference.update({'completed': value});
-                });
-              },
-              activeColor: Colors.white,
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Checkbox(
+                  checkColor: Colors.black,
+                  fillColor: const MaterialStatePropertyAll(Colors.white),
+                  value: widget.checklistItem['completed'],
+                  onChanged: (value) {
+                    setState(() {
+                      widget.checklistItem.reference
+                          .update({'completed': value});
+                    });
+                  },
+                  activeColor: Colors.white,
+                ),
+                IconButton(
+                    onPressed: () async {
+                      await showDialog<String>(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text('Add Task'),
+                            content: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                TextField(
+                                  controller: textEditingController,
+                                  decoration: const InputDecoration(
+                                    hintText: 'Enter new checklist item',
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                              ],
+                            ),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context, 'Cancel');
+                                },
+                                child: const Text('Cancel'),
+                              ),
+                              TextButton(
+                                onPressed: () async {
+                                  if (textEditingController.text.isNotEmpty) {
+                                    await updateTask(
+                                        textEditingController.text);
+                                    setState(() {
+                                      textEditingController.clear();
+                                    });
+                                    if (!mounted) return;
+                                    Navigator.pop(context, 'Update');
+                                  }
+                                },
+                                child: const Text('Update'),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                    icon: const Icon(
+                      Icons.mode_edit_outlined,
+                      color: Colors.white,
+                    ))
+              ],
             ),
           ),
         ),
@@ -107,6 +165,12 @@ class _CheckCardState extends State<CheckCard> {
       'task': task,
       'completed': false,
       'category': cat,
+    });
+  }
+
+  Future<void> updateTask(String task) {
+    return widget.checklistItem.reference.update({
+      'task': task,
     });
   }
 }

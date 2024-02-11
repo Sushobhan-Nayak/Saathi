@@ -22,21 +22,50 @@ class _HomePageState extends State<HomePage> {
           actions: [
             IconButton(
               onPressed: () async {
-                showDialog(
-                    context: context,
-                    builder: (context) =>
-                        const Center(child: CircularProgressIndicator()));
-                final provider = Provider.of<GoogleSignInProvider>(
-                  context,
-                  listen: false,
-                );
-                await provider.logout();
-                if (!mounted) return;
-                Navigator.pop(context);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('User succesfully logged out.'),
-                  ),
+                showDialog<String>(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: const Text('Logout'),
+                      content: const Text(
+                        'Do you want to exit the app ?',
+                        style: TextStyle(
+                          fontSize: 15,
+                        ),
+                      ),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(context, 'No');
+                          },
+                          child: const Text('No'),
+                        ),
+                        TextButton(
+                          onPressed: () async {
+                            Navigator.pop(context, 'Yes');
+                            final provider = Provider.of<GoogleSignInProvider>(
+                              context,
+                              listen: false,
+                            );
+                            // showDialog(
+                            //   context: context,
+                            //   builder: (context) => const Center(
+                            //       child: CircularProgressIndicator()),
+                            // );
+                            await provider.logout(context);
+                            if (!mounted) return;
+
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('User succesfully logged out.'),
+                              ),
+                            );
+                          },
+                          child: const Text('Yes'),
+                        ),
+                      ],
+                    );
+                  },
                 );
               },
               icon: const Icon(
