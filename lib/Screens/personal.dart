@@ -81,15 +81,21 @@ class ChecklistScreenState extends State<ChecklistScreen> {
                   var checklistItems = snapshot.data!.docs
                       .where((doc) => doc['category'] == cat)
                       .toList();
-                  return ListView.builder(
-                    itemCount: checklistItems.length,
-                    itemBuilder: (context, index) {
-                      var checklistItem = checklistItems[index];
-                      return CheckCard(
-                        checklistItem: checklistItem,
-                      );
-                    },
-                  );
+                  if (checklistItems.isNotEmpty) {
+                    return ListView.builder(
+                      itemCount: checklistItems.length,
+                      itemBuilder: (context, index) {
+                        var checklistItem = checklistItems[index];
+                        return CheckCard(
+                          checklistItem: checklistItem,
+                        );
+                      },
+                    );
+                  } else {
+                    return const Center(
+                      child: Text('No data to show'),
+                    );
+                  }
                 },
               ),
             ),

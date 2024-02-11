@@ -69,6 +69,17 @@ class SharedListState extends State<SharedList> {
     }
   }
 
+  Future<void> deleteCollection(String collectionName) async {
+    final CollectionReference collectionRef =
+        FirebaseFirestore.instance.collection(collectionName);
+
+    final QuerySnapshot snapshot = await collectionRef.get();
+
+    for (DocumentSnapshot doc in snapshot.docs) {
+      await doc.reference.delete();
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -146,9 +157,48 @@ class SharedListState extends State<SharedList> {
                   label: const Text('Add Group'),
                 ),
                 ElevatedButton.icon(
-                  icon: const Icon(Icons.group_add_outlined),
+                  icon: const Icon(Icons.group_remove_outlined),
                   onPressed: () async {
-                    await deleteStringFromSharedList(cat);
+                    await showDialog<String>(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: const Text('Delete Group'),
+                          content: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              TextField(
+                                controller: shareController,
+                                decoration: const InputDecoration(
+                                  hintText: 'Enter Group id',
+                                ),
+                              ),
+                            ],
+                          ),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context, 'Cancel');
+                              },
+                              child: const Text('Cancel'),
+                            ),
+                            TextButton(
+                              onPressed: () async {
+                                if (shareController.text.isNotEmpty) {
+                                  await deleteStringFromSharedList(
+                                      shareController.text);
+                                  await deleteCollection(
+                                      'tasks_${shareController.text}');
+                                  if (!mounted) return;
+                                  Navigator.pop(context, 'Delete');
+                                }
+                              },
+                              child: const Text('Delete'),
+                            ),
+                          ],
+                        );
+                      },
+                    );
                   },
                   label: const Text('Delete Group'),
                 ),

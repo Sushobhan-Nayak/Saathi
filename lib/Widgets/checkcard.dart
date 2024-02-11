@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class CheckCard extends StatefulWidget {
@@ -10,6 +11,18 @@ class CheckCard extends StatefulWidget {
 }
 
 class _CheckCardState extends State<CheckCard> {
+  late CollectionReference tasks;
+  String t = '';
+  String c = '';
+  late User user;
+
+  @override
+  void initState() {
+    super.initState();
+    user = FirebaseAuth.instance.currentUser!;
+    tasks = FirebaseFirestore.instance.collection('tasks_${user.uid}');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -29,12 +42,20 @@ class _CheckCardState extends State<CheckCard> {
           ),
         ),
         onDismissed: (direction) {
-          setState(() {
-            widget.checklistItem.reference.delete();
-          });
+          t = widget.checklistItem['task'];
+          c = widget.checklistItem['category'];
+
+          widget.checklistItem.reference.delete();
+
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text("Task deleted."),
+            SnackBar(
+              content: const Text("Task deleted."),
+              action: SnackBarAction(
+                label: 'Undo',
+                onPressed: () {
+                  addTask(t, c);
+                },
+              ),
             ),
           );
         },
@@ -74,5 +95,18 @@ class _CheckCardState extends State<CheckCard> {
         ),
       ),
     );
+  }
+
+  Future<void> addTask(String task, String cat) {
+    if (cat != 'Personal' && cat != 'Travel' && cat != 'Docs') {
+      tasks = FirebaseFirestore.instance.collection('tasks_$cat');
+    } else {
+      tasks = FirebaseFirestore.instance.collection('tasks_${user.uid}');
+    }
+    return tasks.add({
+      'task': task,
+      'completed': false,
+      'category': cat,
+    });
   }
 }
