@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "634262095096",
+    "project_id": "saathi-e00e0",
+    "storage_bucket": "saathi-e00e0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:634262095096:android:0d1d6212f6e06a281c270d",
+        "android_client_info": {
+          "package_name": "com.example.saathi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "634262095096-ge8plbgicb9t79sctfcdqbnupsk7mihe.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.saathi",
+            "certificate_hash": "c9c479e18843df811274e346e6cfe78685a5e8b7"
+          }
+        },
+        {
+          "client_id": "634262095096-q2d7vfnprbp9knjk99f1hg067h3mr044.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAvvFqFTfeSOAtdYcOg0xrgFRQ-0NCco48"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "634262095096-q2d7vfnprbp9knjk99f1hg067h3mr044.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "634262095096-9psliv9d3pmm4g16pvpjlrne5it3hp6u.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.saathi"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
