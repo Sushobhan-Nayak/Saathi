@@ -96,7 +96,7 @@ class SharedListState extends State<SharedList> {
         title: const Text(
           'Shared Checklist',
           style: TextStyle(
-            fontWeight: FontWeight.w500,
+            fontWeight: FontWeight.bold,
           ),
         ),
         backgroundColor: Colors.transparent,
@@ -116,7 +116,10 @@ class SharedListState extends State<SharedList> {
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
-                          title: const Text('Add Group'),
+                          title: const Text(
+                            'Add Group',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
                           content: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
@@ -125,6 +128,8 @@ class SharedListState extends State<SharedList> {
                                 decoration: const InputDecoration(
                                   hintText: 'Enter Group id',
                                 ),
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold),
                               ),
                             ],
                           ),
@@ -133,7 +138,10 @@ class SharedListState extends State<SharedList> {
                               onPressed: () {
                                 Navigator.pop(context, 'Cancel');
                               },
-                              child: const Text('Cancel'),
+                              child: const Text(
+                                'Cancel',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
                             ),
                             TextButton(
                               onPressed: () async {
@@ -147,14 +155,18 @@ class SharedListState extends State<SharedList> {
                                   Navigator.pop(context, 'Add');
                                 }
                               },
-                              child: const Text('Add'),
+                              child: const Text(
+                                'Add',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
                             ),
                           ],
                         );
                       },
                     );
                   },
-                  label: const Text('Add Group'),
+                  label: const Text('Add Group',
+                      style: TextStyle(fontWeight: FontWeight.bold)),
                 ),
                 ElevatedButton.icon(
                   icon: const Icon(Icons.group_remove_outlined),
@@ -163,7 +175,8 @@ class SharedListState extends State<SharedList> {
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
-                          title: const Text('Delete Group'),
+                          title: const Text('Delete Group',
+                              style: TextStyle(fontWeight: FontWeight.bold)),
                           content: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
@@ -172,6 +185,8 @@ class SharedListState extends State<SharedList> {
                                 decoration: const InputDecoration(
                                   hintText: 'Enter Group id',
                                 ),
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold),
                               ),
                             ],
                           ),
@@ -180,7 +195,9 @@ class SharedListState extends State<SharedList> {
                               onPressed: () {
                                 Navigator.pop(context, 'Cancel');
                               },
-                              child: const Text('Cancel'),
+                              child: const Text('Cancel',
+                                  style:
+                                      TextStyle(fontWeight: FontWeight.bold)),
                             ),
                             TextButton(
                               onPressed: () async {
@@ -193,14 +210,20 @@ class SharedListState extends State<SharedList> {
                                   Navigator.pop(context, 'Delete');
                                 }
                               },
-                              child: const Text('Delete'),
+                              child: const Text(
+                                'Delete',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
                             ),
                           ],
                         );
                       },
                     );
                   },
-                  label: const Text('Delete Group'),
+                  label: const Text(
+                    'Delete Group',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
                 ),
               ],
             ),
@@ -239,7 +262,12 @@ class SharedListState extends State<SharedList> {
                 stream: tasks.snapshots(),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {
-                    return const Center(child: Text('No data to show !'));
+                    return const Center(
+                        child: Text(
+                      'No data to show !',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    ));
                   }
                   var checklistItems = snapshot.data!.docs
                       .where((doc) => doc['category'] == cat)
@@ -340,6 +368,7 @@ class SharedListState extends State<SharedList> {
       'task': task,
       'completed': false,
       'category': cat,
+      'time': DateTime.now(),
     });
   }
 }

@@ -34,7 +34,7 @@ class ChecklistScreenState extends State<ChecklistScreen> {
         title: const Text(
           'My Checklist',
           style: TextStyle(
-            fontWeight: FontWeight.w500,
+            fontWeight: FontWeight.bold,
           ),
         ),
         backgroundColor: Colors.transparent,
@@ -58,6 +58,10 @@ class ChecklistScreenState extends State<ChecklistScreen> {
                 selectedShadow: [],
                 selectedColor: Theme.of(context).colorScheme.primary,
                 unselectedColor: Colors.white,
+                selectedTextStyle: const TextStyle(
+                    fontWeight: FontWeight.bold, color: Colors.white),
+                unselectedTextStyle:
+                    const TextStyle(fontWeight: FontWeight.bold),
                 unselectedBorderColor: const Color.fromARGB(114, 186, 186, 186),
                 mainGroupAlignment: MainGroupAlignment.start,
                 unselectedShadow: [],
@@ -73,7 +77,7 @@ class ChecklistScreenState extends State<ChecklistScreen> {
             ),
             Expanded(
               child: StreamBuilder<QuerySnapshot>(
-                stream: tasks.snapshots(),
+                stream: tasks.orderBy('time', descending: true).snapshots(),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {
                     return const Center(child: Text('No data to show !'));
@@ -93,7 +97,11 @@ class ChecklistScreenState extends State<ChecklistScreen> {
                     );
                   } else {
                     return const Center(
-                      child: Text('No data to show'),
+                      child: Text(
+                        'No data to show',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 16),
+                      ),
                     );
                   }
                 },
@@ -108,7 +116,10 @@ class ChecklistScreenState extends State<ChecklistScreen> {
             context: context,
             builder: (BuildContext context) {
               return AlertDialog(
-                title: const Text('Add Task'),
+                title: const Text(
+                  'Add Task',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
                 content: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -117,6 +128,7 @@ class ChecklistScreenState extends State<ChecklistScreen> {
                       decoration: const InputDecoration(
                         hintText: 'Enter checklist item',
                       ),
+                      style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(
                       height: 20,
@@ -137,6 +149,10 @@ class ChecklistScreenState extends State<ChecklistScreen> {
                         unselectedColor: Colors.white,
                         unselectedBorderColor:
                             const Color.fromARGB(114, 186, 186, 186),
+                        selectedTextStyle: const TextStyle(
+                            fontWeight: FontWeight.bold, color: Colors.white),
+                        unselectedTextStyle:
+                            const TextStyle(fontWeight: FontWeight.bold),
                         mainGroupAlignment: MainGroupAlignment.start,
                         unselectedShadow: [],
                         borderRadius: const BorderRadius.all(
@@ -153,7 +169,10 @@ class ChecklistScreenState extends State<ChecklistScreen> {
                     onPressed: () {
                       Navigator.pop(context, 'Cancel');
                     },
-                    child: const Text('Cancel'),
+                    child: const Text(
+                      'Cancel',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
                   ),
                   TextButton(
                     onPressed: () async {
@@ -166,7 +185,10 @@ class ChecklistScreenState extends State<ChecklistScreen> {
                         Navigator.pop(context, 'Add');
                       }
                     },
-                    child: const Text('Add'),
+                    child: const Text(
+                      'Add',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
                   ),
                 ],
               );
@@ -183,6 +205,7 @@ class ChecklistScreenState extends State<ChecklistScreen> {
       'task': task,
       'completed': false,
       'category': cat,
+      'time': DateTime.now(),
     });
   }
 }

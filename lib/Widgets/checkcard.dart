@@ -15,6 +15,7 @@ class _CheckCardState extends State<CheckCard> {
   late CollectionReference tasks;
   String t = '';
   String c = '';
+  DateTime d = DateTime.now();
   late User user;
 
   @override
@@ -45,7 +46,7 @@ class _CheckCardState extends State<CheckCard> {
         onDismissed: (direction) {
           t = widget.checklistItem['task'];
           c = widget.checklistItem['category'];
-
+          d = widget.checklistItem['time'];
           widget.checklistItem.reference.delete();
           setState(() {});
           ScaffoldMessenger.of(context).showSnackBar(
@@ -54,32 +55,39 @@ class _CheckCardState extends State<CheckCard> {
               action: SnackBarAction(
                 label: 'Undo',
                 onPressed: () {
-                  addTask(t, c);
+                  addTask(t, c, d);
                 },
               ),
             ),
           );
         },
         child: Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             boxShadow: [
               BoxShadow(
                 blurRadius: 2,
-                offset: const Offset(3, 4),
-                color: Colors.grey[800]!,
+                offset: Offset(3, 4),
+                color: Color.fromARGB(255, 92, 91, 91),
               )
             ],
-            borderRadius: const BorderRadius.all(
+            borderRadius: BorderRadius.all(
               Radius.circular(12),
             ),
             gradient: LinearGradient(
-              colors: [Colors.pink[900]!, Colors.deepOrange[700]!],
+              colors: [
+                Color(0xff122C34),
+                Color.fromARGB(255, 63, 96, 194),
+                Color(0xff224870),
+              ],
             ),
           ),
           child: ListTile(
             title: Text(
               widget.checklistItem['task'],
-              style: const TextStyle(color: Colors.white),
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
@@ -102,7 +110,10 @@ class _CheckCardState extends State<CheckCard> {
                         context: context,
                         builder: (BuildContext context) {
                           return AlertDialog(
-                            title: const Text('Add Task'),
+                            title: const Text(
+                              'Update Task',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
                             content: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
@@ -111,6 +122,8 @@ class _CheckCardState extends State<CheckCard> {
                                   decoration: const InputDecoration(
                                     hintText: 'Enter new checklist item',
                                   ),
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold),
                                 ),
                                 const SizedBox(
                                   height: 20,
@@ -122,7 +135,10 @@ class _CheckCardState extends State<CheckCard> {
                                 onPressed: () {
                                   Navigator.pop(context, 'Cancel');
                                 },
-                                child: const Text('Cancel'),
+                                child: const Text(
+                                  'Cancel',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
                               ),
                               TextButton(
                                 onPressed: () async {
@@ -136,7 +152,10 @@ class _CheckCardState extends State<CheckCard> {
                                     Navigator.pop(context, 'Update');
                                   }
                                 },
-                                child: const Text('Update'),
+                                child: const Text(
+                                  'Update',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
                               ),
                             ],
                           );
@@ -155,7 +174,7 @@ class _CheckCardState extends State<CheckCard> {
     );
   }
 
-  Future<void> addTask(String task, String cat) {
+  Future<void> addTask(String task, String cat, DateTime d) {
     if (cat != 'Personal' && cat != 'Travel' && cat != 'Docs') {
       tasks = FirebaseFirestore.instance.collection('tasks_$cat');
     } else {
@@ -165,6 +184,7 @@ class _CheckCardState extends State<CheckCard> {
       'task': task,
       'completed': false,
       'category': cat,
+      'time': d,
     });
   }
 

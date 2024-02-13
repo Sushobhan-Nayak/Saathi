@@ -38,6 +38,7 @@ class LoginPageState extends State<LoginPage> {
             child: SignInButton(
               buttonType: ButtonType.google,
               buttonSize: ButtonSize.medium,
+              btnTextColor: Colors.black,
               onPressed: () async {
                 showDialog(
                     context: context,
